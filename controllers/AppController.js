@@ -1,25 +1,36 @@
 import redisClient from '../utils/redis';
 import dbClient from '../utils/db';
 
+/**
+ * Controller for the index route.
+ * @class AppController
+ * @method getStatus
+ * @method getStats
+ */
 class AppController {
-  static getStatus(request, response) {
-    try {
-      const redis = redisClient.isAlive();
-      const db = dbClient.isAlive();
-      response.status(200).send({ redis, db });
-    } catch (error) {
-      console.log(error);
-    }
+  /**
+   * Method for the route GET /status.
+   * Checks the status of the API.
+   * @param {object} _req - The express request object.
+   * @param {object} res - The express response object.
+   * @returns {object} The status code 200 and the status of the API.
+   */
+  static getStatus(_req, res) {
+    res.status(200).json({ redis: redisClient.isAlive(), db: dbClient.isAlive() });
   }
 
-  static async getStats(request, response) {
-    try {
-      const users = await dbClient.nbUsers();
-      const files = await dbClient.nbFiles();
-      response.status(200).send({ users, files });
-    } catch (error) {
-      console.log(error);
-    }
+  /**
+   * Method for the route GET /stats.
+   * Checks the stats of the API.
+   * @param {object} _req - The express request object.
+   * @param {object} res - The express response object.
+   * @returns {object} The status code 200 and the stats of the API.
+   */
+  static getStats(_req, res) {
+    Promise.all([dbClient.nbUsers(), dbClient.nbFiles()])
+      .then(([usersCount, filesCount]) => {
+        res.status(200).json({ users: usersCount, files: filesCount });
+      });
   }
 }
 
