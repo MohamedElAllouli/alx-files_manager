@@ -1,15 +1,14 @@
 import express from 'express';
-import initializeRoutes from './routes';
+import controllerRouting from './routes/index';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
-// express.json() middleware
-app.use(express.json({ limit: '200mb' }));
+app.use(express.json());
+controllerRouting(app);
 
-// Initialize routes
-initializeRoutes(app);
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
+
+export default app;

@@ -25,10 +25,10 @@ module.exports = {
     'no-restricted-syntax': [
       'error',
       'LabeledStatement',
-      'WithStatement',
+      'withStatement',
     ],
   },
-  overrides: [
+  overrides:[
     {
       files: ['*.js'],
       excludedFiles: 'babel.config.js',
